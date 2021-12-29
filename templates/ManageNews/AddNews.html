@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="../ckeditor.js"></script>
+    <title>Document</title>
+</head>
+<body>
+<style>
+    .register {
+        background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+        margin-top: 3%;
+        padding: 3%;
+    }
+
+    .register-left {
+        text-align: center;
+        color: #fff;
+        margin-top: 4%;
+    }
+
+    .register-left input {
+        border: none;
+        border-radius: 1.5rem;
+        padding: 2%;
+        width: 60%;
+        background: #f8f9fa;
+        font-weight: bold;
+        color: #383d41;
+        margin-top: 30%;
+        margin-bottom: 3%;
+        cursor: pointer;
+    }
+
+    .register-right {
+        background: #f8f9fa;
+        border-top-left-radius: 10% 50%;
+        border-bottom-left-radius: 10% 50%;
+    }
+
+    .register-left img {
+        margin-top: 15%;
+        margin-bottom: 5%;
+        width: 25%;
+        -webkit-animation: mover 2s infinite alternate;
+        animation: mover 1s infinite alternate;
+    }
+
+    @-webkit-keyframes mover {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @keyframes mover {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .register-left p {
+        font-weight: lighter;
+        padding: 12%;
+        margin-top: -9%;
+    }
+
+    .register .register-form {
+        padding: 10%;
+        margin-top: 10%;
+    }
+
+    .btnRegister {
+        float: right;
+        margin-top: 10%;
+        border: none;
+        border-radius: 1.5rem;
+        padding: 2%;
+        background: #0062cc;
+        color: #fff;
+        font-weight: 600;
+        width: 50%;
+        cursor: pointer;
+    }
+
+    .register .nav-tabs {
+        margin-top: 3%;
+        border: none;
+        background: #0062cc;
+        border-radius: 1.5rem;
+        width: 28%;
+        float: right;
+    }
+
+    .register .nav-tabs .nav-link {
+        padding: 2%;
+        height: 34px;
+        font-weight: 600;
+        color: #fff;
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+
+    .register .nav-tabs .nav-link:hover {
+        border: none;
+    }
+
+    .register .nav-tabs .nav-link.active {
+        width: 100px;
+        color: #0062cc;
+        border: 2px solid #0062cc;
+        border-top-left-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
+    }
+
+    .register-heading {
+        text-align: center;
+        margin-top: 8%;
+        margin-bottom: -15%;
+        color: #495057;
+    }
+
+    .label {
+        padding: 0.385rem 0.75rem;
+    }
+
+    .answer {
+        margin-left: 30px;
+    }
+
+    .file {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    .radio {
+        display: flex;
+    }
+</style>
+<div class="container register">
+    <div class="row">
+        <div class="col-md-3 register-left">
+            <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
+            <h3>Welcome</h3>
+            <p>You are 30 seconds away from earning your own money!</p>
+            <input type="submit" name="" value="Login"/><br/>
+        </div>
+        <div class="col-md-9 register-right">
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                       aria-controls="home" aria-selected="false" onclick="ChangePage(1)">Question</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <form action="{% url 'ManageNews:addNews' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">Apply as a News</h3>
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="title" height="50px"
+                                           placeholder="Your Title *" value=""/>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="content" height="50px"
+                                           placeholder="Your Content *" value=""/>
+                                </div>
+                                <div class="form-group">
+                                    <span class="label label-primary">  Choice Image </span>
+                                    <input type="file" class="form-control" onchange="Show()" name="image"
+                                           id="image_uploads"
+                                           placeholder="Audio" value=""/>
+                                    <div class="ml-2 col-sm-6">
+                                        <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select class="form-control" name="category_id">
+                                        <option class="hidden" selected disabled>Please select your Sequrity Question
+                                        </option>
+                                        {% for o in category %}
+                                            <option value="{{ o.id }}">{{ o.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <span class="label label-primary">  Choice Audio </span>
+                                    <input type="file" class="form-control" onchange="Show()" name="audio"
+                                           id="audio_uploads"
+                                           placeholder="Audio" value=""/>
+                                </div>
+                                <div class="form-group">
+                                    <span class="label label-primary">  Choice Video </span>
+                                    <input type="file" class="form-control" name="video " id="video_uploads"
+                                           placeholder="Video" value=""/>
+                                </div>
+
+                            </div>
+                            <input type="submit" class="btnRegister" value="Submit"/>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <form>
+            <textarea name="editor1" id="editor1" rows="10" cols="80">
+                This is my textarea to be replaced with CKEditor 4.
+            </textarea>
+        <script>
+            // Replace the <textarea id="editor1"> with a CKEditor 4
+            // instance, using default configuration.
+            CKEDITOR.replace('editor1');
+        </script>
+    </form>
+
+</div>
+
+<script>
+    function ChangePage(page) {
+        if (page == 1) {
+            document.getElementById("home").style.display = "block"
+            document.getElementById("profile").style.display = "none"
+            document.getElementById("home-tab").classList.add("active");
+            document.getElementById("profile-tab").classList.remove("active");
+        }
+        if (page == 2) {
+            document.getElementById("profile").style.display = "block"
+            document.getElementById("home").style.display = "none"
+            document.getElementById("home-tab").classList.remove("active");
+            document.getElementById("profile-tab").classList.add("active");
+            document.getElementById("profile").classList.add("show");
+        }
+
+
+    }
+
+    function Show() {
+        image = document.getElementById("image_uploads").value;
+        video = document.getElementById("video_uploads").value;
+        audio = document.getElementById("audio_uploads").value;
+        document.getElementById("showImg").src == image
+
+    }
+
+
+    $('#image_uploads').change(function (e) {
+        var fileName = e.target.files[0].name;
+        {#$("#file_image").val(fileName);#}
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById("preview").src = e.target.result;
+        };
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    });
+
+</script>
+</body>
+</html>

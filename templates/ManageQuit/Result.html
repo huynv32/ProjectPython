@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script type="text/javascript" src="jscript/graph.js"></script>
+
+    <title>Title</title>
+</head>
+<body>
+<style>
+    body {
+        background: #1D1F20;
+        padding: 16px;
+    }
+
+    .chart-container {
+        position: relative;
+        max-width: 800px;
+        margin: auto;
+    }
+
+
+</style>
+<h1 style="color: antiquewhite">{{ mes }}</h1>
+<div class="chart-container">
+    <canvas id="chart_0"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script type="text/javascript" src="jscript/graph.js"></script>
+<script>
+
+    console.log("test")
+    list_scope = []
+    list_user = []
+    {% for o in list_scope %}
+        list_scope.push("{{ o }}")
+    {% endfor %}
+    {% for o in list_user %}
+        list_user.push("{{ o }}")
+    {% endfor %}
+
+    var data = {
+        labels: list_user,
+        datasets: [{
+            label: "Dataset #1",
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data:list_scope,
+        }]
+    };
+
+    var option = {
+        scales: {
+            yAxes: [{
+                stacked: true,
+                gridLines: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }]
+        }
+    };
+
+    Chart.Bar('chart_0', {
+        options: option,
+        data: data
+    });
+
+
+</script>
+</body>
+</html>

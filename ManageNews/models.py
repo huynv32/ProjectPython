@@ -28,3 +28,8 @@ class News(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class Image_News(models.Model):
+    news_id = models.ForeignKey(News, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='image/')

@@ -8,11 +8,11 @@
     {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">#}
 
     <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Title</title>
+
 </head>
 <body>
 <style>
@@ -585,7 +585,14 @@
             grid-column: 4/7;
         }
     }
-
+.row {
+    display: flex;
+}
+.col-md-2{
+    margin-top: 40px;
+    padding: 0 30px;
+    margin-bottom: 100px;
+}
     /*END OF NORMAL STYLING*/
 </style>
 <nav>
@@ -668,6 +675,24 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        {% for o in image %}
+            <div class="col-md-2">
+                <div class="thumbnail">
+                    <a href="/w3images/lights.jpg">
+                        <img src="{{ o.image.url }}" alt="Lights" style="width:100%">
+                    </a>
+                    <div>
+                        <p>
+                            ảnh số {{ i }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 <script>

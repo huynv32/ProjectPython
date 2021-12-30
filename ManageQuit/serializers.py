@@ -1,7 +1,10 @@
 # from django.contrib.auth.models import User
 from datetime import datetime
 
+import self as self
+from django.contrib.auth.models import User
 from django.forms import ModelForm
+from django.http import HttpResponse
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Question, Category, Answer, Result
@@ -72,3 +75,9 @@ class ResultSerializer(ModelForm):
     class Meta:
         model = Result
         fields = ['id', "user_id", "scope", "category"]
+
+
+class UserSerializer(ModelForm):
+    class Meta:
+        model = User
+        fields = ['id', "username", "password"]

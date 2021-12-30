@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.views import View
 
-from ManageNews.models import Category, News
+from ManageNews.models import Category, News, Image_News
 from ManageNews.serializers import NewsSerializer
 
 
@@ -19,7 +19,7 @@ class AddNews(View):
     def post(self, request):
         news = NewsSerializer(request.POST, request.FILES or None)
         if request.method == "POST":
-
+            list_image = request.FILES.getlist('image')
             news.is_valid();
             # if mimetypes.guess_type(question.cleaned_data['video']).startswith('video'):
             #     print('It is a video')
@@ -34,6 +34,7 @@ class AddNews(View):
             video_file_url = fs.url(file_video)
             news.cleaned_data['audio'] = audio_file_url
             news.cleaned_data['video'] = video_file_url
+            news.cleaned_data['image'] = list_image[0]
             # if request.user.is_authenticated():
             #     user_id = request.user.id
             # else:
@@ -43,7 +44,10 @@ class AddNews(View):
                 news.save()
             except Exception as e:
                 print(e)
-
+            obj = News.objects.latest('id')
+            for i in list_image[1:]:
+                image = Image_News(news_id_id=obj.id, image=i)
+                image.save()
             listNews = News.objects.all()
             context = {
                 "list": listNews
@@ -100,8 +104,10 @@ class update_news(View):
 def detail_news(request, news_id):
     news = News.objects.get(pk=news_id)
     category = Category.objects.get(pk=news.category_id_id)
+    image = Image_News.objects.filter(news_id=news_id)
     context = {
         "news": news,
+        "image": image,
         "category": category
     }
     return render(request, 'ManageNews/Detail_News.html', context)

@@ -17,8 +17,9 @@ from setuptools.glob import magic_check
 # Create your views here.
 from django.views import View
 
+from ManageNews.models import Image_News
 from ManageQuit.models import Category, Question, Answer, Result
-from ManageQuit.serializers import QuestionSerializer, AnswerSerializer, CategorySerializer
+from ManageQuit.serializers import QuestionSerializer, AnswerSerializer, CategorySerializer, UserSerializer
 import mimetypes
 
 
@@ -34,7 +35,8 @@ class ManageQuit(LoginRequiredMixin, View):
         # answer = AnswerSerializer(request.POST, request.FILES or None)
         answer_get = request.POST.getlist('answer')
         choice = request.POST.get('choice')
-        print(choice)
+        list_image = request.FILES.getlist('image')
+
         if request.method == "POST":
             question.is_valid();
             fs = FileSystemStorage()
@@ -44,19 +46,22 @@ class ManageQuit(LoginRequiredMixin, View):
             video_file_url = fs.url(file_video)
             question.cleaned_data['audio'] = audio_file_url
             question.cleaned_data['video'] = video_file_url
+            question.cleaned_data['image'] = list_image[0]
+
             # user_id = request.user.id
             # if not user_id:
             #     user_id = User.objects.get(username="huy")
             # question.cleaned_data['user_id'] = user_id
             # question.cleaned_data['dateCreated'] = datetime.now()
-            question.cleaned_data['category_id'] = 2
+            question.cleaned_data['category_id'] = request.POST.get("category_id")
             try:
                 question.save()
             except Exception as e:
-                print(e)
+                HttpResponse("add không thành công")
 
             listQuestion = Question.objects.all()
             obj = Question.objects.latest('id')
+
             for idx, val in enumerate(answer_get):
                 if idx + 1 == int(choice):
                     answer = Answer(question_id_id=obj.id, content=val, value=True, status=True)
@@ -89,6 +94,7 @@ class LoginClass(View):
 
         username = request.POST.get("username")
         password = request.POST.get("password")
+        user = User.objects.get(username=username)
         if not username and not password:
             HttpResponse("username and password can not empty")
             # return render(request,"bạn ")
@@ -96,8 +102,10 @@ class LoginClass(View):
         if my_user is None:
             return HttpResponse("đăng nhập sai ")
         login(request, my_user)
+        request.session['user'] = my_user.id
+        print(my_user.id)
         mes = "Đăng nhập thành công"
-        return redirect('/question/')
+        return redirect("/question/")
 
 
 def addCategory(request):
@@ -182,9 +190,18 @@ total = 0
 list = {}
 
 
-class MakeQuit(LoginRequiredMixin, View):
-
+class MakeQuit(View):
     def get(self, request):
+        print("huy")
+        try:
+            if 'user' in request.session:
+                user = request.session['user']
+                print(user)
+
+        except:
+            return render(request, 'ManageQuit/login.html')
+        print(request.user)
+        print("huyyyy")
         try:
             global total
             global list
@@ -243,7 +260,7 @@ class MakeQuit(LoginRequiredMixin, View):
                 HttpResponse("Question không tồn tại")
             mes = str(new_page) + "/10"
             print(new_page)
-            context = {"question": question, "answer": list_answer, "mes": mes, "page": new_page, "total": total}
+            context = {"question": question, "answer": list_answer, "mes": mes, "page": new_page}
             return render(request, 'ManageQuit/DetailQuestion.html', context)
 
 
